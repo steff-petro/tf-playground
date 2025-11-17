@@ -1,5 +1,5 @@
 variable "vm_state" {
-  description = "Define state for all vm's"
+  description = "Define state for all the nodes"
   type        = string
   default     = "TERMINATED" # valid states: TERMINATED / RUNNING
 }
