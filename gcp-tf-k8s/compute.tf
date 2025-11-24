@@ -2,6 +2,7 @@ resource "google_compute_instance" "node_control_plane" {
   name           = "node-control-plane"
   machine_type   = "e2-standard-2"
   desired_status = var.vm_state
+  tags           = ["control-plane-node"]
 
   boot_disk {
     initialize_params {
@@ -9,7 +10,7 @@ resource "google_compute_instance" "node_control_plane" {
       size  = 60
       type  = "pd-ssd"
     }
-    auto_delete = false
+    auto_delete = true
   }
 
   network_interface {
@@ -23,6 +24,7 @@ resource "google_compute_instance" "node_worker" {
   name           = "worker-${count.index + 1}"
   machine_type   = "e2-standard-2"
   desired_status = var.vm_state
+  tags           = ["worker-node"]
 
   boot_disk {
     initialize_params {
@@ -30,7 +32,7 @@ resource "google_compute_instance" "node_worker" {
       size  = 60
       type  = "pd-ssd"
     }
-    auto_delete = false
+    auto_delete = true
   }
 
   network_interface {
