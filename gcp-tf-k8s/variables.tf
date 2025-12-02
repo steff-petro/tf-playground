@@ -21,5 +21,10 @@ variable "cidr_workers_subnet" {
   description = "the cidr of the controlplane subnet"
   type        = string
   default     = "192.168.20.0/24"
+}
 
+variable "pod_cidr" {
+  description = "value set for pod cidr"
+  type        = string
+  default     = "10.244.0.0/16"
 }

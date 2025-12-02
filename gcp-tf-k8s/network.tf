@@ -43,6 +43,10 @@ resource "google_compute_firewall" "firewall_k8s_control_plane" {
     protocol = "tcp"
     ports    = ["6443"]
   }
+  allow {
+    protocol = "udp"
+    ports    = ["8472"]
+  }
 
   allow {
     protocol = "tcp"
@@ -64,7 +68,27 @@ resource "google_compute_firewall" "firewall_k8s_control_plane" {
     ports    = ["10257"]
   }
 
-  source_ranges = [var.cidr_workers_subnet]
+  allow {
+    protocol = "tcp"
+    ports    = ["30000-32767"]
+  }
+
+  allow {
+    protocol = "udp"
+    ports    = ["30000-32767"]
+  }
+  allow {
+    protocol = "tcp"
+    ports    = ["4240"]
+  }
+  allow {
+    protocol = "icmp"
+  }
+
+  source_ranges = [
+    var.cidr_workers_subnet,
+    var.cidr_controlplane_subnet
+  ]
 }
 
 resource "google_compute_firewall" "k8s_worker_internal" {
@@ -87,7 +111,10 @@ resource "google_compute_firewall" "k8s_worker_internal" {
     protocol = "tcp"
     ports    = ["10256"]
   }
-
+  allow {
+    protocol = "tcp"
+    ports    = ["4240"]
+  }
   allow {
     protocol = "tcp"
     ports    = ["30000-32767"]
@@ -97,7 +124,9 @@ resource "google_compute_firewall" "k8s_worker_internal" {
     protocol = "udp"
     ports    = ["30000-32767"]
   }
-
+  allow {
+    protocol = "icmp"
+  }
   source_ranges = [
     var.cidr_workers_subnet,
     var.cidr_controlplane_subnet
