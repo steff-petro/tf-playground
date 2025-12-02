@@ -67,11 +67,16 @@ resource "google_compute_firewall" "firewall_k8s_control_plane" {
   source_ranges = [var.cidr_workers_subnet]
 }
 
-resource "google_compute_firewall" "k8s_worker" {
-  name        = "firewall-k8s-worker"
+resource "google_compute_firewall" "k8s_worker_internal" {
+  name        = "firewall-k8s-worker-internal"
   network     = google_compute_network.vpc_k8s.id
   direction   = "INGRESS"
   target_tags = ["worker-node"]
+
+  allow {
+    protocol = "udp"
+    ports    = ["8472"]
+  }
 
   allow {
     protocol = "tcp"
@@ -93,8 +98,12 @@ resource "google_compute_firewall" "k8s_worker" {
     ports    = ["30000-32767"]
   }
 
-  source_ranges = [var.cidr_controlplane_subnet]
+  source_ranges = [
+    var.cidr_workers_subnet,
+    var.cidr_controlplane_subnet
+  ]
 }
+
 
 
 resource "google_compute_router" "router" {

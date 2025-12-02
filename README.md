@@ -9,4 +9,6 @@ Example: `ssh-keygen -t rsa -f ~/.ssh/node-access -C stefanp0618`
 
 Can create without password
 
-- Make project a env variable
+- create a service account
+- download key
+- Set env variable: `export GOOGLE_APPLICATION_CREDENTIALS="path"`
